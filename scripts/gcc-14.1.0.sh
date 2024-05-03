@@ -59,6 +59,8 @@ PKG_PATCHES=(
 	gcc/gcc-10-libgcc-ldflags.patch
 	gcc/gcc-12-replace-abort-with-fancy_abort.patch
 	gcc/gcc-13-mcf-sjlj-avoid-infinite-recursion.patch
+	gcc/gcc-14-add-truncate-option.patch
+	gcc/gcc-14-lto-wrapper-truncate.patch
 )
 
 #

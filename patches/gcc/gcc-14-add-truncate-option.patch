@@ -1,0 +1,93 @@
+From 985b5a90f70c7376c771317c6c8c3bc5ef05e227 Mon Sep 17 00:00:00 2001
+From: Peter Damianov <peter0x44@disroot.org>
+Date: Sun, 28 Apr 2024 16:16:11 -0700
+Subject: [PATCH] Driver: Add new -truncate option
+
+This commit adds a new option to the driver that truncates one file after
+linking.
+
+Tested likeso:
+
+$ gcc hello.c -c
+$ du -h hello.o
+4.0K  hello.o
+$ gcc hello.o -truncate hello.o
+$ ./a.out
+Hello world
+$ du -h hello.o
+$ 0   hello.o
+
+$ gcc hello.o -truncate
+gcc: error: missing filename after '-truncate'
+
+The motivation for adding this is PR110710. It is used by lto-wrapper to
+truncate files in a shell-independent manner.
+
+Signed-off-by: Peter Damianov <peter0x44@disroot.org>
+
+	PR lto/110710
+	* common.opt (truncate): New internal option.
+	* gcc.cc (totruncate_file): New global.
+	(driver_handle_option): Handle -truncate <file>.
+	(driver::final_actions): Truncate the file indicated.
+---
+ gcc/common.opt |  6 ++++++
+ gcc/gcc.cc     | 14 ++++++++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/gcc/common.opt b/gcc/common.opt
+index ad3488447752b..40cab3cb36a33 100644
+--- a/gcc/common.opt
++++ b/gcc/common.opt
+@@ -422,6 +422,12 @@ Display target specific command line options (including assembler and linker opt
+ -time
+ Driver Alias(time)
+ 
++;; Truncate the file specified after linking.
++;; This option is used by lto-wrapper to reduce the peak disk-usage when
++;; linking with many .LTRANS units.
++truncate
++Driver Separate Undocumented MissingArgError(missing filename after %qs)
++
+ -verbose
+ Driver Alias(v)
+ 
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index 728332b81538f..830a4700a87b3 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -2138,6 +2138,10 @@ static int have_E = 0;
+ /* Pointer to output file name passed in with -o. */
+ static const char *output_file = 0;
+ 
++/* Pointer to input file name passed in with -truncate.
++   This file should be truncated after linking. */
++static const char *totruncate_file = 0;
++
+ /* This is the list of suffixes and codes (%g/%u/%U/%j) and the associated
+    temp file.  If the HOST_BIT_BUCKET is used for %j, no entry is made for
+    it here.  */
+@@ -4538,6 +4542,11 @@ driver_handle_option (struct gcc_options *opts,
+       do_save = false;
+       break;
+ 
++    case OPT_truncate:
++      totruncate_file = arg;
++      do_save = false;
++      break;
++
+     case OPT____:
+       /* "-###"
+ 	 This is similar to -v except that there is no execution
+@@ -9286,6 +9295,11 @@ driver::final_actions () const
+     delete_failure_queue ();
+   delete_temp_files ();
+ 
++  if (totruncate_file != NULL && !seen_error ())
++    /* Truncate file specified by -truncate.
++       Used by lto-wrapper to reduce temporary disk-space usage. */
++    truncate(totruncate_file, 0);
++
+   if (print_help_list)
+     {
+       printf (("\nFor bug reporting instructions, please see:\n"));
