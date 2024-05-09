@@ -47,7 +47,9 @@ PKG_PRIORITY=extra
 
 #
 
-PKG_PATCHES=()
+PKG_PATCHES=(
+	termcap/01-makefile-no-cflags-set.patch
+)
 
 #
 
@@ -58,10 +60,10 @@ PKG_CONFIGURE_FLAGS=(
 	#
 	--prefix=$LIBS_DIR
 	#
-#	CFLAGS="\"$COMMON_CFLAGS -D__USE_MINGW_ANSI_STDIO=1\""
-#	CXXFLAGS="\"$COMMON_CXXFLAGS\""
-#	CPPFLAGS="\"$COMMON_CPPFLAGS\""
-#	LDFLAGS="\"$COMMON_LDFLAGS\""
+	CFLAGS="$COMMON_CFLAGS -Wno-error=implicit-function-declaration"
+	CXXFLAGS="$COMMON_CXXFLAGS"
+	CPPFLAGS="$COMMON_CPPFLAGS"
+	LDFLAGS="$COMMON_LDFLAGS"
 )
 
 #
