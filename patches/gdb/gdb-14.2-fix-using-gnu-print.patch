@@ -1,0 +1,70 @@
+diff --git a/bfd/bfd.c b/bfd/bfd.c
+index 88943a0..1a1ebf2 100644
+--- a/bfd/bfd.c
++++ b/bfd/bfd.c
+@@ -1137,7 +1137,7 @@ _bfd_doprnt (print_func print, void *stream, const char *format,
+ 			break;
+ 		      case 2:
+ 		      default:
+-#if defined (__MSVCRT__)
++#if defined (__MSVCRT__) && !defined(__USE_MINGW_ANSI_STDIO)
+ 			sptr[-3] = 'I';
+ 			sptr[-2] = '6';
+ 			sptr[-1] = '4';
+diff --git a/gdb/gdbsupport/format.h b/gdb/gdbsupport/format.h
+index 80f012a41a..17a5560283 100644
+--- a/gdbsupport/format.h
++++ b/gdbsupport/format.h
+@@ -23,7 +23,11 @@
+ #include "gdbsupport/gdb_string_view.h"
+ 
+ #if defined(__MINGW32__) && !defined(PRINTF_HAS_LONG_LONG)
+-# define USE_PRINTF_I64 1
++# if !defined(__USE_MINGW_ANSI_STDIO)
++#  define USE_PRINTF_I64 1
++# else
++#  define USE_PRINTF_I64 0
++# endif
+ # define PRINTF_HAS_LONG_LONG
+ #else
+ # define USE_PRINTF_I64 0
+diff --git a/gnulib/import/inttypes.in.h b/gnulib/import/inttypes.in.h
+index ed09db6e86..ae06fdedc8 100644
+--- a/gnulib/import/inttypes.in.h
++++ b/gnulib/import/inttypes.in.h
+@@ -187,7 +187,7 @@
+ #ifdef INT64_MAX
+ # if (@APPLE_UNIVERSAL_BUILD@ ? defined _LP64 : @INT64_MAX_EQ_LONG_MAX@)
+ #  define _PRI64_PREFIX "l"
+-# elif defined _MSC_VER || defined __MINGW32__
++# elif (defined _MSC_VER || defined __MINGW32__) && !defined(__USE_MINGW_ANSI_STDIO)
+ #  define _PRI64_PREFIX "I64"
+ # elif @HAVE_LONG_LONG_INT@ && LONG_MAX >> 30 == 1
+ #  define _PRI64_PREFIX _LONG_LONG_FORMAT_PREFIX
+@@ -204,7 +204,7 @@
+ #ifdef UINT64_MAX
+ # if (@APPLE_UNIVERSAL_BUILD@ ? defined _LP64 : @UINT64_MAX_EQ_ULONG_MAX@)
+ #  define _PRIu64_PREFIX "l"
+-# elif defined _MSC_VER || defined __MINGW32__
++# elif (defined _MSC_VER || defined __MINGW32__) && !defined(__USE_MINGW_ANSI_STDIO)
+ #  define _PRIu64_PREFIX "I64"
+ # elif @HAVE_UNSIGNED_LONG_LONG_INT@ && ULONG_MAX >> 31 == 1
+ #  define _PRIu64_PREFIX _LONG_LONG_FORMAT_PREFIX
+@@ -680,7 +680,7 @@
+ #ifdef INT64_MAX
+ # if (@APPLE_UNIVERSAL_BUILD@ ? defined _LP64 : @INT64_MAX_EQ_LONG_MAX@)
+ #  define _SCN64_PREFIX "l"
+-# elif defined _MSC_VER || defined __MINGW32__
++# elif (defined _MSC_VER || defined __MINGW32__) && !defined(__USE_MINGW_ANSI_STDIO)
+ #  define _SCN64_PREFIX "I64"
+ # elif @HAVE_LONG_LONG_INT@ && LONG_MAX >> 30 == 1
+ #  define _SCN64_PREFIX _LONG_LONG_FORMAT_PREFIX
+@@ -697,7 +697,7 @@
+ #ifdef UINT64_MAX
+ # if (@APPLE_UNIVERSAL_BUILD@ ? defined _LP64 : @UINT64_MAX_EQ_ULONG_MAX@)
+ #  define _SCNu64_PREFIX "l"
+-# elif defined _MSC_VER || defined __MINGW32__
++# elif (defined _MSC_VER || defined __MINGW32__) && !defined(__USE_MINGW_ANSI_STDIO)
+ #  define _SCNu64_PREFIX "I64"
+ # elif @HAVE_UNSIGNED_LONG_LONG_INT@ && ULONG_MAX >> 31 == 1
+ #  define _SCNu64_PREFIX _LONG_LONG_FORMAT_PREFIX
