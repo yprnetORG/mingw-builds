@@ -687,6 +687,26 @@ function func_configure {
 	}
 
 	[[ ! -f $_marker ]] && {
+		local -n args="$3"
+		local -a non_flag_args=()
+		unset CFLAGS
+		unset CXXFLAGS
+		unset CPPFLAGS
+		unset LDFLAGS
+		for item in "${args[@]}"; do
+			# echo $item
+			if [[ $item == "CFLAGS="* ]]; then
+				export CFLAGS=${item#*=}
+			elif [[ $item == "CXXFLAGS="* ]]; then
+				export CXXFLAGS=${item#*=}
+			elif [[ $item == "CPPFLAGS="* ]]; then
+				export CPPFLAGS=${item#*=}
+			elif [[ $item == "LDFLAGS="* ]]; then
+				export LDFLAGS=${item#*=}
+			else
+				non_flag_args+=("$item")
+			fi
+		done
 		#echo "CFLAGS=\"$CFLAGS\", CXXFLAGS=\"$CXXFLAGS\", CPPFLAGS=\"$CPPFLAGS\", LDFLAGS=\"$LDFLAGS\""
 		#echo "ARGS=\"${3}\""
 		echo -n "--> configure..."
@@ -696,7 +716,7 @@ function func_configure {
 		} || {
 			local _rel_dir=$( func_absolute_to_relative $5/$_subbuilddir $SRCS_DIR/$_subsrcdir )
 		}
-		eval $PKG_CONFIGURE_PROG $_rel_dir/$PKG_CONFIGURE_SCRIPT "${3}" > $4 2>&1
+		eval $PKG_CONFIGURE_PROG $_rel_dir/$PKG_CONFIGURE_SCRIPT "${non_flag_args[@]}" > $4 2>&1
 		_result=$?
 		popd > /dev/null
 		[[ $_result == 0 ]] && {
@@ -977,7 +997,8 @@ function func_map_gcc_name_to_gcc_version {
 		gcc-11-branch)	echo "11.4.1" ;;
 		gcc-12-branch)	echo "12.3.1" ;;
 		gcc-13-branch)	echo "13.2.1" ;;
-		gcc-trunk)		echo "14.0.0" ;;
+		gcc-14-branch)	echo "14.1.1" ;;
+		gcc-trunk)		echo "15.0.0" ;;
 		*) die "gcc name error: $1. terminate." ;;
 	esac
 }

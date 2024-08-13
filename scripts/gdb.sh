@@ -35,7 +35,7 @@
 
 # **************************************************************************
 
-PKG_VERSION=$( [[ `echo $BUILD_VERSION | cut -d. -f1` == 4 || `echo $BUILD_VERSION | cut -d. -f1` == 5 ]] && { echo 7.12; } || { echo 11.2; } )
+PKG_VERSION=$( [[ `echo $BUILD_VERSION | cut -d. -f1` == 4 || `echo $BUILD_VERSION | cut -d. -f1` == 5 ]] && { echo 7.12; } || { echo 14.2; } )
 PKG_NAME=gdb-${PKG_VERSION}
 PKG_DIR_NAME=gdb-${PKG_VERSION}
 PKG_TYPE=.tar.xz
@@ -52,9 +52,12 @@ PKG_PATCHES=(
 	#gdb/gdb-7.9-mingw-gcc-4.7.patch
 	# http://sourceware.org/bugzilla/show_bug.cgi?id=15412
 	gdb/gdb-perfomance.patch
-	$( [[ ${PKG_VERSION} == 7.12 ]] && { echo "gdb/gdb-7.12-fix-using-gnu-print.patch"; } || { echo "gdb/gdb-fix-using-gnu-print.patch"; } )
+	$( [[ ${PKG_VERSION} == 7.12 ]] \
+		&& { echo "gdb/gdb-7.12-fix-using-gnu-print.patch"; } \
+		|| { echo "gdb/gdb-14.2-fix-using-gnu-print.patch"; } 
+	)
 	$( [[ ${PKG_VERSION} == 7.12 ]] && { echo "gdb/gdb-7.12-dynamic-libs.patch"; } || { echo "gdb/gdb-8.3.1-dynamic-libs.patch"; } )
-	$( [[ ${PKG_VERSION} == 10.2 ]] && { echo "gdb/gdb-10.2-fix-gnulib-dependencies.patch"; } )
+	# $( [[ ${PKG_VERSION} == 10.2 ]] && { echo "gdb/gdb-10.2-fix-gnulib-dependencies.patch"; } )
 )
 
 #
@@ -81,10 +84,10 @@ PKG_CONFIGURE_FLAGS=(
 	--disable-gdbtk
 	#
 	# the _WIN32_WINNT hack here because of: https://sourceware.org/pipermail/gdb/2022-November/050432.html
-	CFLAGS="\"$COMMON_CFLAGS -I$LIBS_DIR/include/ncursesw -D__USE_MINGW_ANSI_STDIO=1 -fcommon -DNCURSES_STATIC -D_WIN32_WINNT=0x0601\""
-	CXXFLAGS="\"$COMMON_CXXFLAGS -I$LIBS_DIR/include/ncursesw -D__USE_MINGW_ANSI_STDIO=1 -DNCURSES_STATIC -D_WIN32_WINNT=0x0601\""
-	CPPFLAGS="\"$COMMON_CPPFLAGS -I$LIBS_DIR/include/ncursesw -D__USE_MINGW_ANSI_STDIO=1 -DNCURSES_STATIC -D_WIN32_WINNT=0x0601\""
-	LDFLAGS="\"$COMMON_LDFLAGS $( [[ $BUILD_ARCHITECTURE == i686 ]] && echo -Wl,--large-address-aware )\""
+	CFLAGS="$COMMON_CFLAGS -I$LIBS_DIR/include/ncursesw -D__USE_MINGW_ANSI_STDIO=1 -fcommon -DNCURSES_STATIC -D_WIN32_WINNT=0x0601"
+	CXXFLAGS="$COMMON_CXXFLAGS -I$LIBS_DIR/include/ncursesw -D__USE_MINGW_ANSI_STDIO=1 -DNCURSES_STATIC -D_WIN32_WINNT=0x0601"
+	CPPFLAGS="$COMMON_CPPFLAGS -I$LIBS_DIR/include/ncursesw -D__USE_MINGW_ANSI_STDIO=1 -DNCURSES_STATIC -D_WIN32_WINNT=0x0601"
+	LDFLAGS="$COMMON_LDFLAGS $( [[ $BUILD_ARCHITECTURE == i686 ]] && echo -Wl,--large-address-aware )"
 )
 
 #

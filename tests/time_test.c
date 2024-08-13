@@ -39,6 +39,7 @@
 #include <time.h>
 #include <errno.h>
 #include <windows.h>
+#include <process.h>
 
 #define POW10_3                 1000
 #define POW10_6                 1000000

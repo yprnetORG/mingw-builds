@@ -176,7 +176,9 @@ readonly RUN_ARGS="$@"
 	echo "    gcc-13.1.0 (13.1.0 release)"
 	echo "    gcc-13.2.0 (13.2.0 release)"
 	echo "    gcc-13-branch (currently 13.2.1-prerelease)"
-	echo "    gcc-trunk (currently 14.0.0-snapshot)"
+	echo "    gcc-14.1.0 (14.1.0 release)"
+	echo "    gcc-14-branch (currently 14.1.1-prerelease)"
+	echo "    gcc-trunk (currently 15.0.0-snapshot)"
 
 	exit 0
 }
@@ -310,14 +312,14 @@ while [[ $# > 0 ]]; do
 					RUNTIME_VERSION=v9
 					RUNTIME_BRANCH="v9.x"
 				;;
-                v10)
-                    RUNTIME_VERSION=v10
-                    RUNTIME_BRANCH="v10.x"
-                ;;
-                v11)
-                    RUNTIME_VERSION=v11
-                    RUNTIME_BRANCH="v11.x"
-                ;;
+				v10)
+					RUNTIME_VERSION=v10
+					RUNTIME_BRANCH="v10.x"
+				;;
+				v11)
+					RUNTIME_VERSION=v11
+					RUNTIME_BRANCH="v11.x"
+				;;
 				trunk)
 					RUNTIME_VERSION=v12
 					RUNTIME_BRANCH="master"
@@ -857,11 +859,14 @@ for rule in ${SUBTARGETS[@]}; do
 
 		func_dbg_hook $sub "configure"
 		[[ ${#PKG_CONFIGURE_FLAGS[@]} >0 ]] && {
-			configure_flags="${PKG_CONFIGURE_FLAGS[@]}"
+			declare -a configure_flags=()
+			for flag in "${PKG_CONFIGURE_FLAGS[@]}"; do
+				configure_flags+=("$flag")
+			done
 			func_configure \
 				$PKG_NAME \
 				$PKG_DIR_NAME \
-				"$configure_flags" \
+				"configure_flags" \
 				$CONFIGURE_LOG \
 				$CURR_BUILD_DIR \
 				$PKG_LNDIR \
