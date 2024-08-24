@@ -134,6 +134,7 @@ At the moment, successfully building the following versions:
   gcc-12.1.0
   gcc-12.2.0
   gcc-12.3.0
+  gcc-12.4.0
   gcc-13.1.0
   gcc-13.2.0
   gcc-13.3.0
@@ -150,7 +151,7 @@ At the moment, successfully building the following versions:
   gcc-9-branch (currently 9.5.1-prerelease)
   gcc-10-branch (currently 10.5.1-prerelease)
   gcc-11-branch (currently 11.4.1-prerelease)
-  gcc-12-branch (currently 12.3.1-prerelease)
+  gcc-12-branch (currently 12.4.1-prerelease)
   gcc-13-branch (currently 13.3.1-prerelease)
   gcc-14-branch (currently 14.2.1-prerelease)
   gcc-trunk (currently 15.0.0 snapshot)
