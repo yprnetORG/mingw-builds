@@ -35,12 +35,12 @@
 
 # **************************************************************************
 
-PKG_VERSION=11
-PKG_NAME=gcc-${PKG_VERSION}-branch
-PKG_DIR_NAME=gcc-${PKG_VERSION}-branch
-PKG_TYPE=git
+PKG_VERSION=11.5.0
+PKG_NAME=gcc-${PKG_VERSION}
+PKG_DIR_NAME=gcc-${PKG_VERSION}
+PKG_TYPE=.tar.xz
 PKG_URLS=(
-	"https://gcc.gnu.org/git/gcc.git|branch:releases/gcc-$PKG_VERSION|repo:$PKG_TYPE|module:$PKG_DIR_NAME"
+	"https://ftpmirror.gnu.org/gnu/gcc/gcc-${PKG_VERSION}/gcc-${PKG_VERSION}${PKG_TYPE}"
 )
 
 PKG_PRIORITY=main
@@ -82,10 +82,7 @@ PKG_CONFIGURE_FLAGS=(
 		&& echo "--enable-targets=all --enable-multilib" \
 		|| echo "--disable-multilib" \
 	)
-	$( [[ "$DISABLE_GCC_LTO" == yes ]] \
-		&& echo "--enable-languages=$ENABLE_LANGUAGES" \
-		|| echo "--enable-languages=$ENABLE_LANGUAGES,lto"
-	)
+	--enable-languages=$ENABLE_LANGUAGES,lto
 	--enable-libstdcxx-time=yes
 	--enable-threads=$THREADS_MODEL
 	--enable-libgomp
@@ -93,10 +90,7 @@ PKG_CONFIGURE_FLAGS=(
 	$( [[ "$MSVCRT_PHOBOS_OK" == yes && "$D_LANG_ENABLED" == yes ]] \
 		&& echo "--enable-libphobos"
 	)
-	$( [[ "$DISABLE_GCC_LTO" == yes ]] \
-		&& echo "--disable-lto" \
-		|| echo "--enable-lto"
-	)
+	--enable-lto
 	--enable-graphite
 	--enable-checking=release
 	--enable-fully-dynamic-string
