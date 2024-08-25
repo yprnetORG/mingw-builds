@@ -267,11 +267,21 @@ index 0412fa4ba..ed36b935c 100644
 +
 +#endif  /* __USING_MCFGTHREAD__  */
 diff --git a/mingw-w64-crt/crt/ucrt_exit_wrappers.c b/mingw-w64-crt/crt/ucrt_exit_wrappers.c
-index 112d8e3c7..4ef52a687 100644
+index 112d8e3c7..10611ac88 100644
 --- a/mingw-w64-crt/crt/ucrt_exit_wrappers.c
 +++ b/mingw-w64-crt/crt/ucrt_exit_wrappers.c
-@@ -14,7 +14,11 @@ extern void (*__MINGW_IMP_SYMBOL(quick_exit))(int) __attribute__((__noreturn__))
- 
+@@ -7,6 +7,9 @@
+ #undef __MSVCRT_VERSION__
+ #define _UCRT
+ #include <_mingw.h>
++#ifdef __USING_MCFGTHREAD__
++#include <mcfgthread/exit.h>
++#endif
+
+ /* `quick_exit()`, C99  */
+ void quick_exit(int status) __attribute__((__noreturn__));
+@@ -14,7 +17,11 @@ extern void (*__MINGW_IMP_SYMBOL(quick_exit))(int) __attribute__((__noreturn__))
+
  void quick_exit(int status)
  {
 +#ifdef __USING_MCFGTHREAD__
@@ -280,10 +290,10 @@ index 112d8e3c7..4ef52a687 100644
    (*__MINGW_IMP_SYMBOL(quick_exit))(status);
 +#endif
  }
- 
+
  /* `_Exit()`, C99  */
-@@ -23,5 +27,9 @@ extern void (*__MINGW_IMP_SYMBOL(_Exit))(int) __attribute__((__noreturn__));
- 
+@@ -23,5 +30,9 @@ extern void (*__MINGW_IMP_SYMBOL(_Exit))(int) __attribute__((__noreturn__));
+
  void _Exit(int status)
  {
 +#ifdef __USING_MCFGTHREAD__

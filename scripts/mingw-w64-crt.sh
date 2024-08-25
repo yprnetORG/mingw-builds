@@ -50,19 +50,31 @@ PKG_PRIORITY=runtime
 
 PKG_PATCHES=(
 	$( [[ $RUNTIME_VERSION == v10.0.0 ]] && \
-	    [[ $MSVCRT_VERSION == ucrt ]] && {
-	        echo "mingw-w64/89bacd2be60fa92dd74d3b5f2074b06a32d8c784.patch"
-		    echo "mingw-w64/bceadc54d8f32b3f14c69074892e2718eac08e3b.patch"
+		[[ $MSVCRT_VERSION == ucrt ]] && {
+			echo "mingw-w64/89bacd2be60fa92dd74d3b5f2074b06a32d8c784.patch"
+			echo "mingw-w64/bceadc54d8f32b3f14c69074892e2718eac08e3b.patch"
 		}
 	)
 	$( [[ $RUNTIME_MAJOR_VERSION -ge 11 ]] && {
-		echo "mingw-w64/9001-crt-Mark-atexit-as-DATA-because-it-s-always-overridd.patch"
-		[[ $RUNTIME_MAJOR_VERSION -ge 12 ]] && {
-			echo "mingw-w64/9002-crt-Provide-wrappers-for-exit-in-libmingwex.patch"
+		[[ $RUNTIME_MAJOR_VERSION -ge 13 ]] && {
+			echo "mingw-w64/9001-v13-crt-Mark-atexit-as-DATA-because-it-s-always-overridd.patch"
 		} || {
-			echo "mingw-w64/9002-v11-crt-Provide-wrappers-for-exit-in-libmingwex.patch"
+			echo "mingw-w64/9001-v11-crt-Mark-atexit-as-DATA-because-it-s-always-overridd.patch"
 		}
-		echo "mingw-w64/9003-crt-Implement-standard-conforming-termination-suppor.patch"
+		[[ $RUNTIME_MAJOR_VERSION -ge 13 ]] && {
+			echo "mingw-w64/9002-v13-crt-Provide-wrappers-for-exit-in-libmingwex.patch"
+		} || {
+			[[ $RUNTIME_MAJOR_VERSION -ge 12 ]] && {
+				echo "mingw-w64/9002-v12-crt-Provide-wrappers-for-exit-in-libmingwex.patch"
+			} || {
+				echo "mingw-w64/9002-v11-crt-Provide-wrappers-for-exit-in-libmingwex.patch"
+			}
+		}
+		[[ $RUNTIME_MAJOR_VERSION -ge 13 ]] && {
+			echo "mingw-w64/9003-v13-crt-Implement-standard-conforming-termination-support.patch"
+		} || {
+			echo "mingw-w64/9003-v11-crt-Implement-standard-conforming-termination-support.patch"
+		}
 	})
 )
 
