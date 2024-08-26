@@ -1,0 +1,23 @@
+Patch by Jonathan Wakely copied from https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110572#c9
+
+--- a/libstdc++-v3/libsupc++/typeinfo
++++ b/libstdc++-v3/libsupc++/typeinfo
+@@ -73,7 +73,7 @@ namespace __cxxabiv1
+ 
+ // By default follow the old inline rules to avoid ABI changes.
+ #ifndef __GXX_TYPEINFO_EQUALITY_INLINE
+-#  if !__GXX_WEAK__
++#  if !__GXX_WEAK__ || defined(_WIN32)
+ #    define __GXX_TYPEINFO_EQUALITY_INLINE 0
+ #  else
+ #    define __GXX_TYPEINFO_EQUALITY_INLINE 1
+@@ -188,6 +188,9 @@ namespace std
+ #endif
+ 
+ #if __GXX_TYPEINFO_EQUALITY_INLINE || __cplusplus > 202002L
++#if ! __GXX_TYPEINFO_EQUALITY_INLINE
++  [[__gnu__::__always_inline__]]
++# endif
+   _GLIBCXX23_CONSTEXPR inline bool
+   type_info::operator==(const type_info& __arg) const _GLIBCXX_NOEXCEPT
+   {

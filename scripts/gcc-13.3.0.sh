@@ -35,7 +35,7 @@
 
 # **************************************************************************
 
-PKG_VERSION=14.1.0
+PKG_VERSION=13.3.0
 PKG_NAME=gcc-${PKG_VERSION}
 PKG_DIR_NAME=gcc-${PKG_VERSION}
 PKG_TYPE=.tar.xz
@@ -59,9 +59,6 @@ PKG_PATCHES=(
 	gcc/gcc-10-libgcc-ldflags.patch
 	gcc/gcc-12-replace-abort-with-fancy_abort.patch
 	gcc/gcc-13-mcf-sjlj-avoid-infinite-recursion.patch
-	gcc/gcc-14-add-truncate-option.patch
-	gcc/gcc-14-lto-wrapper-truncate.patch
-	gcc/gcc-14-fix-multiple-definition-of-type_info.patch
 )
 
 #

@@ -35,7 +35,7 @@
 
 # **************************************************************************
 
-PKG_VERSION=14.1.0
+PKG_VERSION=12.4.0
 PKG_NAME=gcc-${PKG_VERSION}
 PKG_DIR_NAME=gcc-${PKG_VERSION}
 PKG_TYPE=.tar.xz
@@ -48,20 +48,21 @@ PKG_PRIORITY=main
 #
 
 PKG_PATCHES=(
+	gcc/gcc-4.7-stdthreads.patch
 	gcc/gcc-5.1-iconv.patch
 	gcc/gcc-4.8-libstdc++export.patch
 	gcc/gcc-12-fix-for-windows-not-minding-non-existant-parent-dirs.patch
+	gcc/gcc-4.8.2-windows-lrealpath-no-force-lowercase-nor-backslash.patch
+	gcc/gcc-4.9.1-enable-shared-gnat-implib.mingw.patch
 	gcc/gcc-5.1.0-make-xmmintrin-header-cplusplus-compatible.patch
+	gcc/gcc-12-fix-mingw-pch.patch
 	gcc/gcc-5-dwarf-regression.patch
+	gcc/gcc-5.1.0-fix-libatomic-building-for-threads=win32.patch
 	gcc/gcc-13.2.0-ktietz-libgomp.patch
 	gcc/gcc-libgomp-ftime64.patch
 	gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
 	gcc/gcc-10-libgcc-ldflags.patch
 	gcc/gcc-12-replace-abort-with-fancy_abort.patch
-	gcc/gcc-13-mcf-sjlj-avoid-infinite-recursion.patch
-	gcc/gcc-14-add-truncate-option.patch
-	gcc/gcc-14-lto-wrapper-truncate.patch
-	gcc/gcc-14-fix-multiple-definition-of-type_info.patch
 )
 
 #
@@ -87,9 +88,6 @@ PKG_CONFIGURE_FLAGS=(
 	)
 	--enable-libstdcxx-time=yes
 	--enable-threads=$THREADS_MODEL
-	$( [[ $THREADS_MODEL == win32 ]] \
-		&& echo "--enable-libstdcxx-threads=yes" \
-	)
 	--enable-libgomp
 	--enable-libatomic
 	$( [[ "$MSVCRT_PHOBOS_OK" == yes && "$D_LANG_ENABLED" == yes ]] \

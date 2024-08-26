@@ -58,9 +58,11 @@ PKG_PATCHES=(
 	gcc/gcc-5.2-fix-mingw-pch.patch
 	gcc/gcc-5-dwarf-regression.patch
 	gcc/gcc-5.1.0-fix-libatomic-building-for-threads=win32.patch
-	gcc/gcc-10-ktietz-libgomp.patch
+	gcc/gcc-11.5.0-ktietz-libgomp.patch
 	gcc/gcc-libgomp-ftime64.patch
 	gcc/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
+	gcc/gcc-10-libgcc-ldflags.patch
+	gcc/gcc-11-replace-abort-with-fancy_abort.patch
 )
 
 #
@@ -136,6 +138,7 @@ PKG_CONFIGURE_FLAGS=(
 	CPPFLAGS="$COMMON_CPPFLAGS"
 	LDFLAGS="$COMMON_LDFLAGS $( [[ $BUILD_ARCHITECTURE == i686 ]] && echo -Wl,--large-address-aware )"
 	LD_FOR_TARGET=$PREFIX/bin/ld.exe
+	--with-boot-ldflags="\"$LDFLAGS -Wl,--disable-dynamicbase -static-libstdc++ -static-libgcc\""
 )
 
 #
