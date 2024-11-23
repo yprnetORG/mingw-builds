@@ -35,12 +35,12 @@
 
 # **************************************************************************
 
-PKG_VERSION=3.1.1
+PKG_VERSION=3.4.0
 PKG_NAME=openssl-${PKG_VERSION}
 PKG_DIR_NAME=openssl-${PKG_VERSION}
 PKG_TYPE=.tar.gz
 PKG_URLS=(
-	"https://www.openssl.org/source/openssl-${PKG_VERSION}${PKG_TYPE}"
+	"https://github.com/openssl/openssl/releases/download/openssl-${PKG_VERSION}/openssl-${PKG_VERSION}${PKG_TYPE}"
 )
 
 PKG_PRIORITY=extra
@@ -50,7 +50,7 @@ PKG_CONFIGURE_SCRIPT=Configure
 #
 
 PKG_PATCHES=(
-	openssl/openssl-3.0.8-relocation.patch
+	openssl/openssl-3.4.0-relocation.patch
 )
 
 #
