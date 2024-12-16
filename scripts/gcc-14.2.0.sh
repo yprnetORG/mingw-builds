@@ -62,6 +62,7 @@ PKG_PATCHES=(
 	gcc/gcc-14-add-truncate-option.patch
 	gcc/gcc-14-lto-wrapper-truncate.patch
 	gcc/gcc-14-fix-multiple-definition-of-type_info.patch
+	gcc/gcc-14.2.0-fix-localedir.patch
 )
 
 #
@@ -122,7 +123,7 @@ PKG_CONFIGURE_FLAGS=(
 	)
 	--disable-rpath
 	--disable-win32-registry
-	--disable-nls
+	--enable-nls
 	--disable-werror
 	--disable-symvers
 	#
